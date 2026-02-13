@@ -38,7 +38,8 @@ class CommentsRepositoryImpl @Inject constructor(
 
                 override fun onCancelled(error: DatabaseError) {
                     AppLogger.w(TAG, "Comments listener cancelled for book=$safeBookId", error.toException())
-                    close(error.toException())
+                    trySend(emptyList())
+                    close()
                 }
             }
             ref.addValueEventListener(listener)
@@ -127,8 +128,7 @@ class CommentsRepositoryImpl @Inject constructor(
         val normalized = querySanitizer.sanitize(input)
             .replace(Regex("[.#$\\[\\]/]"), "_")
             .take(120)
-        require(normalized.isNotBlank()) { "Invalid book id for comment path" }
-        return normalized
+        return normalized.ifBlank { "_" }
     }
 
     private companion object {

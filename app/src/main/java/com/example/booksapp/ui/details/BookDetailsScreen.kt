@@ -1,21 +1,28 @@
 package com.example.booksapp.ui.details
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ImageNotSupported
 import coil.compose.AsyncImage
 import com.example.booksapp.domain.model.BookComment
 import com.example.booksapp.ui.components.CommentItem
@@ -49,13 +56,31 @@ fun BookDetailsScreen(
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         item {
-            AsyncImage(
-                model = book.coverUrl,
-                contentDescription = book.title,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-            )
+            if (book.coverUrl.isNullOrBlank()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(220.dp)
+                        .padding(bottom = 8.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ImageNotSupported,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            } else {
+                AsyncImage(
+                    model = book.coverUrl,
+                    contentDescription = book.title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(220.dp)
+                        .padding(bottom = 8.dp),
+                    contentScale = ContentScale.Fit,
+                )
+            }
             Text(text = book.title, style = MaterialTheme.typography.headlineSmall)
             Text(text = book.author, style = MaterialTheme.typography.titleMedium)
             Text(

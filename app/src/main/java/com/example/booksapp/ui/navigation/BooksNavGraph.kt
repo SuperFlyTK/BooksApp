@@ -100,13 +100,7 @@ fun BooksNavGraph(
             modifier = Modifier.padding(padding),
         ) {
             composable(AppDestination.AUTH) {
-                AuthScreen(
-                    onAuthenticated = {
-                        navController.navigate(AppDestination.FEED) {
-                            popUpTo(AppDestination.AUTH) { inclusive = true }
-                        }
-                    },
-                )
+                AuthScreen()
             }
             composable(AppDestination.FEED) {
                 FeedScreen(

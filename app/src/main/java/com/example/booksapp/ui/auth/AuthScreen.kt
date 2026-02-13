@@ -13,7 +13,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -22,15 +21,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun AuthScreen(
-    onAuthenticated: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value
-    val currentUser = viewModel.currentUser.collectAsStateWithLifecycle().value
-
-    LaunchedEffect(currentUser?.uid) {
-        if (currentUser != null) onAuthenticated()
-    }
 
     Column(
         modifier = Modifier

@@ -15,7 +15,17 @@ fun BookDocDto.toEntity(now: Long): BookEntity? {
         id = normalizedId,
         title = titleValue,
         author = authorNames?.firstOrNull().orEmpty().ifBlank { "Unknown author" },
-        coverUrl = coverId?.let { "https://covers.openlibrary.org/b/id/$it-M.jpg" },
+        coverUrl = when {
+            coverId != null -> "https://covers.openlibrary.org/b/id/$coverId-M.jpg"
+            !coverEditionKey.isNullOrBlank() -> {
+                "https://covers.openlibrary.org/b/olid/${coverEditionKey.trim()}-M.jpg"
+            }
+            !isbn.isNullOrEmpty() -> {
+                val safeIsbn = isbn.firstOrNull().orEmpty().trim()
+                if (safeIsbn.isBlank()) null else "https://covers.openlibrary.org/b/isbn/$safeIsbn-M.jpg"
+            }
+            else -> null
+        },
         firstPublishYear = firstPublishYear,
         subjects = subjects.orEmpty().joinToString(SUBJECT_SEPARATOR),
         description = null,

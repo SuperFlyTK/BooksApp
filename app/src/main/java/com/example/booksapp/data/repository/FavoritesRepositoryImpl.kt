@@ -34,7 +34,8 @@ class FavoritesRepositoryImpl @Inject constructor(
 
                 override fun onCancelled(error: DatabaseError) {
                     AppLogger.w(TAG, "Favorites listener cancelled for user=$safeUserId", error.toException())
-                    close(error.toException())
+                    trySend(emptySet())
+                    close()
                 }
             }
             ref.addValueEventListener(listener)
@@ -71,8 +72,7 @@ class FavoritesRepositoryImpl @Inject constructor(
         val normalized = input.trim()
             .replace(Regex("[.#$\\[\\]/]"), "_")
             .take(120)
-        require(normalized.isNotBlank()) { "Invalid Firebase key" }
-        return normalized
+        return normalized.ifBlank { "_" }
     }
 
     private companion object {

@@ -3,6 +3,7 @@ package com.example.booksapp.di
 import com.example.booksapp.BuildConfig
 import com.example.booksapp.data.remote.api.OpenLibraryApi
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +20,11 @@ import javax.inject.Singleton
 object NetworkModule {
     @Provides
     @Singleton
-    fun provideMoshi(): Moshi = Moshi.Builder().build()
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
 
     @Provides
     @Singleton
