@@ -14,6 +14,7 @@ import com.example.booksapp.domain.repository.BooksRepository
 import com.example.booksapp.domain.usecase.BookMergePolicy
 import com.example.booksapp.domain.usecase.QuerySanitizer
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -41,6 +42,14 @@ class BooksRepositoryImpl @Inject constructor(
 
     override fun observeBookById(bookId: String): Flow<Book?> {
         return booksDao.observeBookById(bookId).map { entity -> entity?.toDomain() }
+    }
+
+    override fun observeBooksByIds(bookIds: Set<String>): Flow<List<Book>> {
+        val ids = bookIds.filter { it.isNotBlank() }
+        if (ids.isEmpty()) return flowOf(emptyList())
+        return booksDao.observeBooksByIds(ids).map { entities ->
+            entities.map { it.toDomain() }.sortedBy { it.title.lowercase() }
+        }
     }
 
     override suspend fun refreshFeed(force: Boolean): Result<Unit> {

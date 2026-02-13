@@ -7,6 +7,7 @@ interface BooksRepository {
     fun observeFeedBooks(): Flow<List<Book>>
     fun observeSearchBooks(query: String): Flow<List<Book>>
     fun observeBookById(bookId: String): Flow<Book?>
+    fun observeBooksByIds(bookIds: Set<String>): Flow<List<Book>>
 
     suspend fun refreshFeed(force: Boolean = false): Result<Unit>
     suspend fun loadMoreFeed(): Result<Unit>

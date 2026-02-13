@@ -3,6 +3,7 @@ package com.example.booksapp.ui.navigation
 import android.net.Uri
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -29,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.booksapp.ui.auth.AuthScreen
 import com.example.booksapp.ui.details.BookDetailsScreen
+import com.example.booksapp.ui.favorites.FavoritesScreen
 import com.example.booksapp.ui.favorites.FavoritesSharedViewModel
 import com.example.booksapp.ui.feed.FeedScreen
 import com.example.booksapp.ui.main.MainViewModel
@@ -67,6 +69,9 @@ fun BooksNavGraph(
 
     val bottomItems = listOf(
         BottomItem(AppDestination.FEED, "Feed") { Icon(Icons.Default.Home, contentDescription = null) },
+        BottomItem(AppDestination.FAVORITES, "Favorites") {
+            Icon(Icons.Default.Favorite, contentDescription = null)
+        },
         BottomItem(AppDestination.SEARCH, "Search") { Icon(Icons.Default.Search, contentDescription = null) },
         BottomItem(AppDestination.PROFILE, "Profile") { Icon(Icons.Default.Person, contentDescription = null) },
     )
@@ -114,6 +119,12 @@ fun BooksNavGraph(
                     onBookClick = { book -> navController.navigate(AppDestination.details(book.id)) },
                     onToggleFavorite = { book -> favoritesViewModel.toggleFavorite(book) },
                     favoriteIds = favoriteIds,
+                )
+            }
+            composable(AppDestination.FAVORITES) {
+                FavoritesScreen(
+                    snackbarHostState = snackbarHostState,
+                    onBookClick = { book -> navController.navigate(AppDestination.details(book.id)) },
                 )
             }
             composable(AppDestination.PROFILE) {

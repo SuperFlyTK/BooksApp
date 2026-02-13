@@ -40,6 +40,9 @@ interface BooksDao {
     @Query("SELECT * FROM books WHERE id = :bookId LIMIT 1")
     fun observeBookById(bookId: String): Flow<BookEntity?>
 
+    @Query("SELECT * FROM books WHERE id IN (:bookIds)")
+    fun observeBooksByIds(bookIds: List<String>): Flow<List<BookEntity>>
+
     @Query("DELETE FROM book_queries WHERE queryTag = :queryTag")
     suspend fun clearQuery(queryTag: String)
 

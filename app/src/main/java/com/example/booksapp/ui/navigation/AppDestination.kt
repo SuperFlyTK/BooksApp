@@ -3,6 +3,7 @@ package com.example.booksapp.ui.navigation
 object AppDestination {
     const val AUTH = "auth"
     const val FEED = "feed"
+    const val FAVORITES = "favorites"
     const val SEARCH = "search"
     const val PROFILE = "profile"
     const val DETAILS = "details/{bookId}"
